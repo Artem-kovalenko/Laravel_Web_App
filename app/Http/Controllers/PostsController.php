@@ -3,24 +3,23 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+
 
 class PostsController
 {
     // Access value in the URL from function params.
-    // We get $post from '/post/{post}'.
-    public function show($post) {
-        $posts = [
-            'my-first-post' => 'Hello, this is my first blog post',
-            'my-second-post' => 'My second blog post'
-        ];
+    // We get $slug from '/post/{post}'.
+    public function show($slug) {
 
-        // Abort if post was not found
-        if (!array_key_exists($post, $posts)) {
-            abort(404, 'Sorry, that post was not found');
+        $post = DB::table('posts')->where('slug', $slug)->first();
+
+        if (! $post) {
+            abort(404);
         }
 
         return view('post', [
-            'post' => $posts[$post]
+            'post' => $post
         ]);
     }
 }
