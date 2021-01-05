@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\ArticlesController;
+
+use App\Models\Article;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,6 +19,28 @@ use App\Http\Controllers\PostsController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/about', function () {
+
+//    $article = Article::take(2)->get();              - Take 2
+//    $article = Article::latest()->get();             - Take the latest
+//    $article = Article::latest('created_at')->get(); - Order by time
+//    $article = Article::paginate(2);                 - Out of the box pagination
+//    $article = Article::all();                       - Take all
+
+    return view('about', [
+        'articles' => Article::take(3)->latest()->get() // TAKE 3 MOST RECENT ARTICLES
+    ]);
+});
+
+Route::get('/articles', [ArticlesController::class, 'index']);
+
+Route::get('/articles/{article}', [ArticlesController::class, 'show']);
+
+
+
+
+
 
 // To get variable from URL by (?=VARIABLE) and pass it to VIEW.
 // Use request global method.
