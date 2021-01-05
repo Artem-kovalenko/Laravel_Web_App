@@ -33,11 +33,15 @@ Route::get('/about', function () {
     ]);
 });
 
+
 Route::get('/articles', [ArticlesController::class, 'index']);
 
+Route::post('/articles', [ArticlesController::class, 'store']);
+
+// Order matters! Need to put "create" endpoint above the "get" to avoid errors.
+Route::get('/articles/create', [ArticlesController::class, 'create']);
+
 Route::get('/articles/{article}', [ArticlesController::class, 'show']);
-
-
 
 
 
