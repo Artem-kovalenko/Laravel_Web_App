@@ -36,6 +36,13 @@ class ArticlesController extends Controller
     {
         // Persist the new resource
 
+        request()->validate([
+            // use array to pass multiple instructions - ['required', 'min: 3', 'max: 255']
+            'title' => 'required',
+            'excerpt' => 'required',
+            'body' => 'required'
+        ]);
+
         $article = new Article();
         $article->title = request('title');
         $article->excerpt = request('excerpt');
@@ -59,6 +66,13 @@ class ArticlesController extends Controller
     public function update($id)
     {
         // Persist the edited resource
+
+        request()->validate([
+            // use array to pass multiple instructions - ['required', 'min: 3', 'max: 255']
+            'title' => 'required',
+            'excerpt' => 'required',
+            'body' => 'required'
+        ]);
 
         $article = Article::find($id);
         $article->title = request('title');
