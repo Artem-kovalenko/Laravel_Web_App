@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\ArticlesController;
+
 use App\Models\Article;
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +33,9 @@ Route::get('/about', function () {
     ]);
 });
 
+Route::get('/articles', [ArticlesController::class, 'index']);
+
+Route::get('/articles/{article}', [ArticlesController::class, 'show']);
 
 
 
