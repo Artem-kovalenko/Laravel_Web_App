@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/about', function () {
+    return view('about');
+});
+
 // To get variable from URL by (?=VARIABLE) and pass it to VIEW.
 // Use request global method.
 Route::get('/test', function () {
