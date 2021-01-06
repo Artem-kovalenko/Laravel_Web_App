@@ -48,10 +48,10 @@ class ArticlesController extends Controller
         //$article->save();
 
         // To avoid the error need to protect variables in the model
-        //! "request()->validate" in "validateArticle" function returns array of values used to ::create article.
+        //! "request()->validate" in "validateArticle" function returns array of validated values used to ::create article.
         Article::create($this->validateArticle());
 
-        return redirect('/articles');
+        return redirect(route('articles.index'));
     }
 
     public function edit(Article $article)
@@ -68,7 +68,8 @@ class ArticlesController extends Controller
 
         $article->update($this->validateArticle());
 
-        return redirect('/articles/' . $article->id);
+        // return redirect('/articles/' . $article->id);
+        return redirect(route('article.show', $article));
     }
 
     public function destroy()
@@ -77,8 +78,7 @@ class ArticlesController extends Controller
 
     }
 
-
-    // function to reduce duplication
+    // function to reduce duplication of validation code
     protected function validateArticle()
     {
         return request()->validate([
