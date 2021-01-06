@@ -30,7 +30,8 @@
 
                 {{--          THE SECOND              --}}
                         @error('title')
-                            <p class="help is-danger">{{ $errors->first('title') }}</p>
+                        {{-- <p class="help is-danger">{{ $errors->first('title') }}</p> --}}
+                            <p class="help is-danger">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>

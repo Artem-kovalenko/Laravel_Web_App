@@ -55,11 +55,11 @@ class ArticlesController extends Controller
     public function edit($id)
     {
         // Show a view to edit an existing resource
-        // Find the article associated with ID
 
+        // Find the article associated with ID
         $article = Article::find($id);
 
-        // compact - function to pass the variable to view
+        // compact - function to pass the variable to view (another way)
         return view('articles.edit', compact('article'));
     }
 
