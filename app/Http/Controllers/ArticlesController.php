@@ -6,18 +6,23 @@ use App\Models\Article;
 
 class ArticlesController extends Controller
 {
-    public function show($id)
+    // We can get variable this way, if "/{article}" matches the "$article below"
+    // Laravel making such request behind the scene - "Article::where('id', 1)->first();"
+    // This approach will work only if names are matching
+    // If we want to use not the key(1/2/3), but slug(my-first-post), we need to edit the Article associated model.
+    public function show(Article $article)
     {
-        // Render a list of resources.
+        // Show a single resource
 
-        $article = Article::find($id);
+        // Find the article associated with ID
+        // $article = Article::find($id);
 
         return view('articles.show', ['article' => $article]);
     }
 
     public function index()
     {
-        // Show a single resource
+        // Render a list of resources.
 
         $articles = Article::latest()->get();
 
@@ -52,18 +57,15 @@ class ArticlesController extends Controller
         return redirect('/articles');
     }
 
-    public function edit($id)
+    public function edit(Article $article)
     {
         // Show a view to edit an existing resource
-
-        // Find the article associated with ID
-        $article = Article::find($id);
 
         // compact - function to pass the variable to view (another way)
         return view('articles.edit', compact('article'));
     }
 
-    public function update($id)
+    public function update(Article $article)
     {
         // Persist the edited resource
 
@@ -74,7 +76,6 @@ class ArticlesController extends Controller
             'body' => 'required'
         ]);
 
-        $article = Article::find($id);
         $article->title = request('title');
         $article->excerpt = request('excerpt');
         $article->body = request('body');
