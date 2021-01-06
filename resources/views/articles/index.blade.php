@@ -8,7 +8,11 @@
                 <div id="content">
                     <div class="title">
                         <h2>
-                            <a href="/articles/{{ $article->id }}">{{ $article->title }}</a>
+                        {{-- <a href="/articles/{{ $article->id }}">--}}
+                        {{-- Usind named route. Second argument - get the ID(wildecard "{article}") --}}
+                            <a href="{{ route('articles.show', $article) }}">
+                                {{ $article->title }}
+                            </a>
                         </h2>
                     </div>
                     <p>

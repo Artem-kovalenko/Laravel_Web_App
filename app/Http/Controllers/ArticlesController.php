@@ -6,18 +6,23 @@ use App\Models\Article;
 
 class ArticlesController extends Controller
 {
-    public function show($id)
+    // We can get variable this way, if "/{article}" matches the "$article below"
+    // Laravel making such request behind the scene - "Article::where('id', 1)->first();"
+    // This approach will work only if names are matching
+    // If we want to use not the key(1/2/3), but slug(my-first-post), we need to edit the Article associated model.
+    public function show(Article $article)
     {
-        // Render a list of resources.
+        // Show a single resource
 
-        $article = Article::find($id);
+        // Find the article associated with ID
+        // $article = Article::find($id);
 
         return view('articles.show', ['article' => $article]);
     }
 
     public function index()
     {
-        // Show a single resource
+        // Render a list of resources.
 
         $articles = Article::latest()->get();
 
@@ -36,52 +41,35 @@ class ArticlesController extends Controller
     {
         // Persist the new resource
 
-        request()->validate([
-            // use array to pass multiple instructions - ['required', 'min: 3', 'max: 255']
-            'title' => 'required',
-            'excerpt' => 'required',
-            'body' => 'required'
-        ]);
+        // $article = new Article();
+        // $article->title = request('title');
+        // $article->excerpt = request('excerpt');
+        // $article->body = request('body');
+        //$article->save();
 
-        $article = new Article();
-        $article->title = request('title');
-        $article->excerpt = request('excerpt');
-        $article->body = request('body');
-        $article->save();
+        // To avoid the error need to protect variables in the model
+        //! "request()->validate" in "validateArticle" function returns array of validated values used to ::create article.
+        Article::create($this->validateArticle());
 
-        return redirect('/articles');
+        return redirect(route('articles.index'));
     }
 
-    public function edit($id)
+    public function edit(Article $article)
     {
         // Show a view to edit an existing resource
-        // Find the article associated with ID
 
-        $article = Article::find($id);
-
-        // compact - function to pass the variable to view
+        // compact - function to pass the variable to view (another way)
         return view('articles.edit', compact('article'));
     }
 
-    public function update($id)
+    public function update(Article $article)
     {
         // Persist the edited resource
 
-        request()->validate([
-            // use array to pass multiple instructions - ['required', 'min: 3', 'max: 255']
-            'title' => 'required',
-            'excerpt' => 'required',
-            'body' => 'required'
-        ]);
+        $article->update($this->validateArticle());
 
-        $article = Article::find($id);
-        $article->title = request('title');
-        $article->excerpt = request('excerpt');
-        $article->body = request('body');
-        $article->save();
-
-        return redirect('/articles/' . $article->id);
-
+        // return redirect('/articles/' . $article->id);
+        return redirect(route('article.show', $article));
     }
 
     public function destroy()
@@ -90,4 +78,13 @@ class ArticlesController extends Controller
 
     }
 
+    // function to reduce duplication of validation code
+    protected function validateArticle()
+    {
+        return request()->validate([
+            'title' => 'required',
+            'excerpt' => 'required',
+            'body' => 'required'
+        ]);
+    }
 }
