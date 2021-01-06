@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Tag;
 
 class ArticlesController extends Controller
 {
@@ -23,8 +24,11 @@ class ArticlesController extends Controller
     public function index()
     {
         // Render a list of resources.
-
-        $articles = Article::latest()->get();
+        if (request('tag')) {
+            $articles = Tag::where('name', request('tag'))->firstOrFail()->articles;
+        } else {
+            $articles = Article::latest()->get();
+        }
 
         return view('articles.index', ['articles' => $articles]);
     }
