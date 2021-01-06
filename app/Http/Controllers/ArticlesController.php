@@ -41,18 +41,15 @@ class ArticlesController extends Controller
     {
         // Persist the new resource
 
-        request()->validate([
-            // use array to pass multiple instructions - ['required', 'min: 3', 'max: 255']
-            'title' => 'required',
-            'excerpt' => 'required',
-            'body' => 'required'
-        ]);
+        // $article = new Article();
+        // $article->title = request('title');
+        // $article->excerpt = request('excerpt');
+        // $article->body = request('body');
+        //$article->save();
 
-        $article = new Article();
-        $article->title = request('title');
-        $article->excerpt = request('excerpt');
-        $article->body = request('body');
-        $article->save();
+        // To avoid the error need to protect variables in the model
+        //! "request()->validate" in "validateArticle" function returns array of values used to ::create article.
+        Article::create($this->validateArticle());
 
         return redirect('/articles');
     }
@@ -69,20 +66,9 @@ class ArticlesController extends Controller
     {
         // Persist the edited resource
 
-        request()->validate([
-            // use array to pass multiple instructions - ['required', 'min: 3', 'max: 255']
-            'title' => 'required',
-            'excerpt' => 'required',
-            'body' => 'required'
-        ]);
-
-        $article->title = request('title');
-        $article->excerpt = request('excerpt');
-        $article->body = request('body');
-        $article->save();
+        $article->update($this->validateArticle());
 
         return redirect('/articles/' . $article->id);
-
     }
 
     public function destroy()
@@ -91,4 +77,14 @@ class ArticlesController extends Controller
 
     }
 
+
+    // function to reduce duplication
+    protected function validateArticle()
+    {
+        return request()->validate([
+            'title' => 'required',
+            'excerpt' => 'required',
+            'body' => 'required'
+        ]);
+    }
 }
