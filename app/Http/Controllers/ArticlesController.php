@@ -37,8 +37,9 @@ class ArticlesController extends Controller
     {
         // Show a view to create a new resource
 
-        return view('articles.create');
-
+        return view('articles.create', [
+            'tags' => Tag::all()
+        ]);
     }
 
     public function store()
@@ -53,7 +54,14 @@ class ArticlesController extends Controller
 
         // To avoid the error need to protect variables in the model
         //! "request()->validate" in "validateArticle" function returns array of validated values used to ::create article.
-        Article::create($this->validateArticle());
+        $this->validateArticle();
+
+        $article = new Article(request(['title', 'excerpt', 'body']));
+        $article->user_id = 1; // hardcode because we do not have auth
+        $article->save();
+
+        // to add (attach) array of tag ids to the article
+        $article->tags()->attach(request('tags'));
 
         return redirect(route('articles.index'));
     }
@@ -88,7 +96,9 @@ class ArticlesController extends Controller
         return request()->validate([
             'title' => 'required',
             'excerpt' => 'required',
-            'body' => 'required'
+            'body' => 'required',
+            // sql will perform a query to make sure that everything is okay
+            'tags' => 'exists:tags,id'
         ]);
     }
 }
