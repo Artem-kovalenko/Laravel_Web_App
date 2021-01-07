@@ -24,4 +24,16 @@ class Article extends Model
 
     // use this to NOT guard anything and make all by your own
     // protected $guarded = [];
+
+    // Article has one user(belongsTo)
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Article has many tags(belongsToMany)
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class)->withTimestamps();
+    }
 }
